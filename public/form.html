@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>email form</title>
+</head>
+<body>
+    <form action="/email_post" method="post">
+       email : <input type="text" name="email"><br/>
+        <input type="submit" >
+    </form>
+    <button class="ajaxsend">ajaxsend</button>
+
+     <div class="ajaxresult"></div>   
+    <script>
+        document.querySelector('.ajaxsend').addEventListener('click', function(){
+            var inputdata = document.forms[0].elements[0].value;
+            console.log(inputdata);
+            sendAjax('http://localhost:4000/ajax_send_email',inputdata)
+        });
+        //ajax 보내는 부분 : xhr방식
+        // function sendAjax(url, data){
+        //     var data = {'email' : data};
+        //     data = JSON.stringify(data);  //문자열로 보내야 에러안남
+        //     var xhr = new XMLHttpRequest();
+        //     xhr.open('POST', url);  
+        //     xhr.setRequestHeader('Content-Type', "application/json"); //서버로 보낼때 어떤 타입인지 명시해줘야함.
+        //     xhr.send(data);
+
+        //     //ajax보내고 받아오는 부분.
+        //     xhr.addEventListener('load', function(){
+        //         console.log(xhr.responseText);
+        //         var result = JSON.parse(xhr.responseText);
+        //         if(result.result1 !== "ok") return;
+        //         document.querySelector('.ajaxresult').innerHTML=result.email;
+        //     })
+        // }
+        
+        //ajax 보내는 부분 : fetch api
+        // function sendAjax(url, data){
+        //     var data = {'email' : data};
+        //     var dataInfo = {
+        //         method : "POST",  //메소드 반드시 지정해줘야 app.js 파일에서 찾을수 있음.
+        //         body : JSON.stringify(data),
+        //         headers : {
+        //             "Content-Type" : "application/json"  // 타입지정해줘야함.. 
+        //         }
+        //     }
+        // fetch(url,dataInfo)
+        //       .then(res => res.json())
+        //       .then(result => {  
+        //         if(result.result1 === "ok"){
+        //             document.querySelector(".ajaxresult").innerHTML = result.email;
+        //         }
+        //       })                           
+          
+        // }
+
+        //ajax 보내는 부분 : async api  //클라 => 서버
+        async function sendAjax(url, data){
+            var data = {'email' : data};
+            
+            var dataInfo = {
+                method : "POST",  //메소드 반드시 지정해줘야 app.js 파일에서 찾을수 있음.
+                body : JSON.stringify(data),
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                crossOrigin : "no-cors"
+            };
+
+            const reqURL = await fetch(url,dataInfo); //서버에 요청하기
+            const result = await reqURL.json();  //응답값 받아오기
+  
+            //console.log(result);
+            if(result.result === "ok"){
+                document.querySelector(".ajaxresult").innerHTML = result.name;
+            }else{
+                document.querySelector(".ajaxresult").innerHTML = 'your email is not found';
+            }
+        }
+
+    </script>
+
+</body>
+</html>

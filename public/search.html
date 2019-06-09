@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/search001" method="post">
+        <input type="text" name="search"> 
+    </form>
+    
+    <button class="btn" >검색</button>
+   <div class="showSearch"></div>
+   <script>
+   document.querySelector(".btn").addEventListener('click', function(){
+        var inputData = document.forms[0].elements[0].value;
+        console.log(inputData);
+        sendAjax('http://localhost:4000/search', inputData);
+   });
+   
+   async function sendAjax (url, data){
+       var data = {"search" : data}
+       var dataInfo1 = {
+                method : "POST",  //메소드 반드시 지정해줘야 app.js 파일에서 찾을수 있음.
+                body : JSON.stringify(data),
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+            };
+
+        const res = await fetch(url, dataInfo1);    
+        const result = await res.json();
+        
+        console.log(result);
+        if(result.result === "ok"){
+                console.log("2", result.search)
+                document.querySelector(".showSearch").innerHTML = result.search;
+        }
+   }
+    
+   </script>
+
+</body>
+</html>
