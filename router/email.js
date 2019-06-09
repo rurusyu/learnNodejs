@@ -5,6 +5,7 @@ var router = express.Router();   //라우터 메소드 이용.
 var path = require('path');  //상대경로 편하기 작성하기 위해서 쓰는 모듈
 var mysql = require('mysql');
 
+//DB 셋팅;
 var connection = mysql.createConnection({
     host : 'localhost',
     port : 3306,
@@ -15,6 +16,7 @@ var connection = mysql.createConnection({
 
 connection.connect();
 
+//라우터 처리
 router.post('/form', (req, res)=>{
     console.log(req.body.email); 
     res.render('email.ejs',{'email': req.body.email}); 
