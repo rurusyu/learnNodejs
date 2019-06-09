@@ -4,8 +4,9 @@ var express = require('express');
 var app = express();
 var router = express.Router();   //라우터 메소드 이용.
 var path = require('path');  //상대경로 편하기 작성하기 위해서 쓰는 모듈
-var main = require('./main');  //만들어진 모듈 호출
-var email = require('./email');
+var main = require('./main/main');  //만들어진 모듈 호출
+var email = require('./email/email');
+var signup = require('./signup/signup');
 
 router.get('/', (req, res)=>{
     res.sendFile(path.join(__dirname, "../public/main.html"));
@@ -13,5 +14,6 @@ router.get('/', (req, res)=>{
 
 router.use('/main', main); // /main으로 주소값이 호출되면 main 모듈을 실행해라.
 router.use('/email', email);
+router.use('/signup', signup);
 
 module.exports = router;
