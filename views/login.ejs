@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>email form</title>
+</head>
+<body>
+    <form action="/email/form" method="post">
+       email : <input type="text" name="email"><br/>
+       passwd : <input type="text" name="password"><br/>
+    </form>
+    <button class="ajaxsend">login</button>
+
+     <div class="ajaxresult"></div>   
+    <script>
+        document.querySelector('.ajaxsend').addEventListener('click', function(){
+            var email = document.getElementsByName('email')[0].value;
+            var password = document.getElementsByName('password')[0].value;
+            sendAjax('http://localhost:4000/login',{'email' : email, 'password' : password});
+        });
+     
+        //ajax 보내는 부분 : async api  //클라 => 서버
+        async function sendAjax(url, data){
+           // var data = {'email' : data, 'password' : password};
+            console.log(data)
+            var dataInfo = {
+                method : "POST",  //메소드 반드시 지정해줘야 app.js 파일에서 찾을수 있음.
+                body : JSON.stringify(data),
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                crossOrigin : "no-cors"
+            };
+
+            const reqURL = await fetch(url,dataInfo); //서버에 요청하기
+            console.log(reqURL)
+            const result = await reqURL.json();  //응답값 받아오기
+  
+            console.log(result);
+            if(result.email){
+                // document.querySelector(".ajaxresult").innerHTML = "welcome, "+result.email+ "!!"; 
+                window.location.href="/main";
+            }else{
+                document.querySelector(".ajaxresult").innerHTML = 'your email is not found!!!';
+            }
+        }
+
+    </script>
+
+</body>
+</html>

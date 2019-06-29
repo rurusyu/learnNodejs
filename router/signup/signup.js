@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     host : 'localhost',
     port : 3306,
     user : 'root',
-    password : '1q2w3e4r',
+    password : '!Rmfltmeh1',
     database :'jsman'
 });
 
@@ -31,7 +31,7 @@ router.post('/', (req, res)=> {
     var name = body.name;
     var password = body.password;    
     console.log(email, name, password);
-    var sql = {email : email, name : name, pw : password};  //'insert into user (email,name,pw) values ("'+email+'", "'+name+'","'+password+'")'
+    var sql = {email : email, name : name, password : password};  //'insert into user (email,name,password) values ("'+email+'", "'+name+'","'+password+'")'
     //DB저장
     var query = connection.query('insert into user set ?',sql, function(err, rows){
         if(err) throw err;     
