@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
     host : 'localhost',
     port : 3306,
     user : 'root',
-    password : '-----',
+    password : '!Qwer4321',
     database :'jsman'
 });
 
@@ -32,13 +32,13 @@ router.get('/', (req, res)=>{
 
 //serialize 처리 해주어야함.(세션에 넣어줘야함) 
 passport.serializeUser(function(user, done){
-  console.log('passport session save : ', user.id)
-  done(null, user.id);
+  // console.log('passport session save : ', user)
+  done(null, user);
 });
 
 //요청시 세션값 뽑아서 페이지 전달 
 passport.deserializeUser(function(id, done){
-  console.log('passport session get id : ', id)
+  // console.log('passport session get id : ', id)
   done(null, id);
 })
 
@@ -51,7 +51,7 @@ passport.use('local-login', new LocalStrategy({
     passReqToCallback : true
     }, function(req, email, password, done){
        //로그인 인증처리
-       console.log("로그인 처리??")
+       console.log("작동순서1")
       var query = connection.query('select * from user where email=?', [email], function(err,rows){
         if(err) return done(err);
         if(rows.length){          
@@ -65,7 +65,7 @@ passport.use('local-login', new LocalStrategy({
 
 //커스텀 콜백사용할 예정(ajax니깐 json 응답을 줘야하기때문에 커스텀 콜백사용)
 router.post('/',function(req, res, next){
-    console.log("커스텀 콜백");
+  console.log("작동순서2")
     passport.authenticate('local-login', function(err, user, info){
         if(err) res.status(500).json(err);
         if(!user) return res.status(401).json(info.message)
@@ -73,6 +73,7 @@ router.post('/',function(req, res, next){
        // req.login을 이용해서 serialize 기능이 자연스럽게 이어지도록 되어있음.
        req.logIn(user, function(err){
            if(err) {return next(err);}
+           console.log("작동순서4")
            return res.json(user);
        });
     })(req, res, next); //authenticate 반환 메서드에 이 인자를 넣어서 처리해야함.
